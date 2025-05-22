@@ -9,52 +9,38 @@ workflows:
       java: 11
 
     scripts:
-      - name: Set up local properties
+      - name: Create project structure
         script: |
+          # Create necessary directories
+          mkdir -p src/main/java/com/example/scamcalldetector
+          mkdir -p src/main/res/values
+          mkdir -p src/main/res/layout
+          mkdir -p gradle/wrapper
+
+          # Create local.properties
           echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
 
-      - name: Set up project structure
-        script: |
-          mkdir -p src/main/res/values
-          echo '<?xml version="1.0" encoding="utf-8"?>
-          <resources>
-              <string name="app_name">Scam Call Detector</string>
-          </resources>' > src/main/res/values/strings.xml
-
-      - name: Set up Gradle wrapper
-        script: |
-          mkdir -p gradle/wrapper
+          # Set up Gradle wrapper
           cd gradle/wrapper
           wget https://services.gradle.org/distributions/gradle-7.6-bin.zip
           wget https://raw.githubusercontent.com/gradle/gradle/v7.6.0/gradle/wrapper/gradle-wrapper.jar
           cd ../..
 
-      - name: Create gradle-wrapper.properties
-        script: |
+          # Create gradle-wrapper.properties
           echo "distributionBase=GRADLE_USER_HOME
           distributionPath=wrapper/dists
           distributionUrl=https\://services.gradle.org/distributions/gradle-7.6-bin.zip
           zipStoreBase=GRADLE_USER_HOME
           zipStorePath=wrapper/dists" > gradle/wrapper/gradle-wrapper.properties
 
-      - name: Fix line endings and permissions
-        script: |
-          apt-get update && apt-get install -y dos2unix
-          dos2unix gradlew
+          # Fix permissions
           chmod +x gradlew
-
-      - name: Debug setup
-        script: |
-          pwd
-          ls -la
-          echo "Content of settings.gradle:"
-          cat settings.gradle
-          echo "Content of build.gradle:"
-          cat build.gradle
 
       - name: Build Android app
         script: |
-          ./gradlew clean assembleDebug --info --stacktrace
+          # Clean and build
+          ./gradlew clean
+          ./gradlew assembleDebug --no-daemon --stacktrace
     artifacts:
       - build/outputs/apk/debug/*.apk
     publishing:
