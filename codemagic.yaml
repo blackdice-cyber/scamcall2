@@ -38,11 +38,27 @@ workflows:
         script: |
           chmod +x gradlew
 
+      - name: Debug - List files
+        script: |
+          echo "Current directory:"
+          pwd
+          echo "\nDirectory contents:"
+          ls -la
+          echo "\nGradle wrapper contents:"
+          ls -la gradle/wrapper/
+
+      - name: Debug - Check build.gradle
+        script: |
+          echo "build.gradle contents:"
+          cat build.gradle
+
       - name: Build Android app
         script: |
-          ./gradlew --no-daemon --stacktrace assembleDebug
+          ./gradlew --no-daemon --stacktrace --info --debug assembleDebug
     artifacts:
       - app/build/outputs/apk/debug/*.apk
+      - build.gradle
+      - gradle/wrapper/*
     publishing:
       email:
         recipients:
