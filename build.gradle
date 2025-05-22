@@ -1,25 +1,15 @@
-plugins {
-    id 'com.android.application' version '7.4.2'
-}
-
 buildscript {
     repositories {
         google()
         mavenCentral()
+        gradlePluginPortal()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.4.2'
     }
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-
+apply plugin: 'com.android.application'
 
 android {
     namespace 'com.example.scamcalldetector'
@@ -43,6 +33,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
+}
+
+repositories {
+    google()
+    mavenCentral()
 }
 
 dependencies {
