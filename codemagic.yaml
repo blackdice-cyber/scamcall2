@@ -7,6 +7,7 @@ workflows:
       vars:
         PACKAGE_NAME: "com.example.scamcalldetector"
       java: 11
+
     scripts:
       - name: Set up local properties
         script: |
@@ -17,13 +18,18 @@ workflows:
           mkdir -p gradle/wrapper
           wget https://services.gradle.org/distributions/gradle-7.6-bin.zip -P gradle/wrapper/
 
+      - name: Fix line endings
+        script: |
+          apt-get update && apt-get install -y dos2unix
+          dos2unix gradlew
+
       - name: Set up gradle permissions
         script: |
           chmod +x gradlew
 
       - name: Build Android app
         script: |
-          ./gradlew assembleDebug
+          ./gradlew --no-daemon assembleDebug
     artifacts:
       - app/build/outputs/apk/debug/*.apk
     publishing:
