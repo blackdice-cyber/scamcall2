@@ -47,22 +47,15 @@ workflows:
           echo "\nGradle wrapper contents:"
           ls -la gradle/wrapper/
 
-      - name: Debug - Check build.gradle
-        script: |
-          echo "build.gradle contents:"
-          cat build.gradle
-
       - name: Build Android app
         script: |
-          ./gradlew --no-daemon --stacktrace --info --debug assembleDebug
+          ./gradlew clean assembleDebug --stacktrace --info
     artifacts:
       - app/build/outputs/apk/debug/*.apk
-      - build.gradle
-      - gradle/wrapper/*
     publishing:
       email:
         recipients:
-          - paul.hague@blackdice.ai # Replace with your email
+          - paul.hague@blackdice.ai
         notify:
           success: true
           failure: true
