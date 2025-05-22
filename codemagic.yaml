@@ -11,7 +11,7 @@ workflows:
     scripts:
       - name: Set up local properties
         script: |
-          echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/local.properties"
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
 
       - name: Set up Gradle wrapper
         script: |
@@ -35,9 +35,18 @@ workflows:
           dos2unix gradlew
           chmod +x gradlew
 
+      - name: Debug setup
+        script: |
+          pwd
+          ls -la
+          echo "Content of settings.gradle:"
+          cat settings.gradle
+          echo "Content of build.gradle:"
+          cat build.gradle
+
       - name: Build Android app
         script: |
-          ./gradlew clean assembleDebug --info
+          ./gradlew clean assembleDebug --info --stacktrace
     artifacts:
       - build/outputs/apk/debug/*.apk
     publishing:
