@@ -13,6 +13,14 @@ workflows:
         script: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
 
+      - name: Set up project structure
+        script: |
+          mkdir -p src/main/res/values
+          echo '<?xml version="1.0" encoding="utf-8"?>
+          <resources>
+              <string name="app_name">Scam Call Detector</string>
+          </resources>' > src/main/res/values/strings.xml
+
       - name: Set up Gradle wrapper
         script: |
           mkdir -p gradle/wrapper
@@ -52,7 +60,7 @@ workflows:
     publishing:
       email:
         recipients:
-          - paul.hague@blackdice.ai
+          - user@example.com
         notify:
           success: true
           failure: true
