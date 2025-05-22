@@ -2,16 +2,26 @@ workflows:
   android-app:
     name: Android App
     max_build_duration: 30
+    instance_type: mac_mini_m1
     environment:
-      # android_signing:
-      #   - keystore_reference
       vars:
         PACKAGE_NAME: "com.example.scamcalldetector"
       java: 11
+      android_sdk: latest
     scripts:
       - name: Set up local properties
         script: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/local.properties"
+      
+      - name: Download Gradle wrapper
+        script: |
+          mkdir -p gradle/wrapper
+          wget https://services.gradle.org/distributions/gradle-7.6-bin.zip -P gradle/wrapper/
+          
+      - name: Set up gradle permissions
+        script: |
+          chmod +x gradlew
+      
       - name: Build Android app
         script: |
           ./gradlew assembleDebug
@@ -23,4 +33,4 @@ workflows:
           - paul.hague@blackdice.ai # Replace with your email
         notify:
           success: true
-          failure: true
+          failure: true 
