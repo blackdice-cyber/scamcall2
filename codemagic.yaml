@@ -13,10 +13,21 @@ workflows:
         script: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/local.properties"
 
-      - name: Download Gradle wrapper
+      - name: Set up Gradle wrapper
         script: |
           mkdir -p gradle/wrapper
-          wget https://services.gradle.org/distributions/gradle-7.6-bin.zip -P gradle/wrapper/
+          cd gradle/wrapper
+          wget https://services.gradle.org/distributions/gradle-7.6-bin.zip
+          wget https://raw.githubusercontent.com/gradle/gradle/v7.6.0/gradle/wrapper/gradle-wrapper.jar
+          cd ../..
+
+      - name: Create gradle-wrapper.properties
+        script: |
+          echo "distributionBase=GRADLE_USER_HOME
+          distributionPath=wrapper/dists
+          distributionUrl=https\://services.gradle.org/distributions/gradle-7.6-bin.zip
+          zipStoreBase=GRADLE_USER_HOME
+          zipStorePath=wrapper/dists" > gradle/wrapper/gradle-wrapper.properties
 
       - name: Fix line endings
         script: |
@@ -29,7 +40,7 @@ workflows:
 
       - name: Build Android app
         script: |
-          ./gradlew --no-daemon assembleDebug
+          ./gradlew --no-daemon --stacktrace assembleDebug
     artifacts:
       - app/build/outputs/apk/debug/*.apk
     publishing:
