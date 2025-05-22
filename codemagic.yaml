@@ -9,6 +9,17 @@ workflows:
       java: 11
 
     scripts:
+      - name: Fix line endings
+        script: |
+          # Install dos2unix
+          apt-get update
+          apt-get install -y dos2unix
+
+          # Fix line endings for all script files
+          find . -type f -name "*.sh" -exec dos2unix {} \;
+          find . -type f -name "gradlew" -exec dos2unix {} \;
+          dos2unix gradlew
+
       - name: Create project structure
         script: |
           # Create necessary directories
@@ -46,7 +57,7 @@ workflows:
     publishing:
       email:
         recipients:
-          - user@example.com
+          - paul.hague@blackdice.ai
         notify:
           success: true
           failure: true
