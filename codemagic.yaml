@@ -29,29 +29,17 @@ workflows:
           zipStoreBase=GRADLE_USER_HOME
           zipStorePath=wrapper/dists" > gradle/wrapper/gradle-wrapper.properties
 
-      - name: Fix line endings
+      - name: Fix line endings and permissions
         script: |
           apt-get update && apt-get install -y dos2unix
           dos2unix gradlew
-
-      - name: Set up gradle permissions
-        script: |
           chmod +x gradlew
-
-      - name: Debug - List files
-        script: |
-          echo "Current directory:"
-          pwd
-          echo "\nDirectory contents:"
-          ls -la
-          echo "\nGradle wrapper contents:"
-          ls -la gradle/wrapper/
 
       - name: Build Android app
         script: |
-          ./gradlew clean assembleDebug --stacktrace --info
+          ./gradlew clean assembleDebug --info
     artifacts:
-      - app/build/outputs/apk/debug/*.apk
+      - build/outputs/apk/debug/*.apk
     publishing:
       email:
         recipients:
